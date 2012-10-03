@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(:version => 20130131070232) do
   add_index "keys", ["user_id"], :name => "index_keys_on_user_id"
 
   create_table "merge_requests", :force => true do |t|
-    t.string   "target_branch",                                          :null => false
-    t.string   "source_branch",                                          :null => false
-    t.integer  "project_id",                                             :null => false
+    t.string   "target_branch",                    :null => false
+    t.string   "source_branch",                    :null => false
+    t.integer  "project_id",                       :null => false
     t.integer  "author_id"
     t.integer  "assignee_id"
     t.string   "title"
