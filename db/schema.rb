@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(:version => 20130131070232) do
   add_index "keys", ["user_id"], :name => "index_keys_on_user_id"
 
   create_table "merge_requests", :force => true do |t|
-    t.string   "target_branch",                    :null => false
-    t.string   "source_branch",                    :null => false
-    t.integer  "project_id",                       :null => false
+    t.string   "target_branch",                                          :null => false
+    t.string   "source_branch",                                          :null => false
+    t.integer  "project_id",                                             :null => false
     t.integer  "author_id"
     t.integer  "assignee_id"
     t.string   "title"
@@ -149,12 +149,13 @@ ActiveRecord::Schema.define(:version => 20130131070232) do
     t.datetime "updated_at",                                :null => false
     t.integer  "creator_id"
     t.string   "default_branch"
-    t.boolean  "issues_enabled",         :default => true,  :null => false
-    t.boolean  "wall_enabled",           :default => true,  :null => false
-    t.boolean  "merge_requests_enabled", :default => true,  :null => false
-    t.boolean  "wiki_enabled",           :default => true,  :null => false
+    t.boolean  "issues_enabled",         :default => true,     :null => false
+    t.boolean  "wall_enabled",           :default => true,     :null => false
+    t.boolean  "merge_requests_enabled", :default => true,     :null => false
+    t.boolean  "wiki_enabled",           :default => true,     :null => false
     t.integer  "namespace_id"
-    t.boolean  "public",                 :default => false, :null => false
+    t.boolean  "public",                 :default => false,    :null => false
+    t.string   "issues_tracker",         :default => "gitlab", :null => false
   end
 
   add_index "projects", ["creator_id"], :name => "index_projects_on_owner_id"

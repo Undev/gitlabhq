@@ -3,6 +3,10 @@
 
 # Gitlab application config file
 
+issues_tracker:
+  redmine:
+    issues_url: "http://pm.undev.cc/issues/:id"
+
 # Web application specific settings
 web:
   host: gitlab.home
