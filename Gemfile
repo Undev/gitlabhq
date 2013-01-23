@@ -76,6 +76,9 @@ gem "unicorn", "~> 4.4.0"
 # Issue tags
 gem "acts-as-taggable-on", "2.3.3"
 
+# Adds enum fields to model
+gem 'enumerize'
+
 # Decorators
 gem "draper", "~> 0.18.0"
 
