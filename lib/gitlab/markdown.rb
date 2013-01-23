@@ -164,7 +164,8 @@ module Gitlab
 
     def reference_issue(identifier)
       if issue = @project.issues.where(id: identifier).first
-        link_to("##{identifier}", project_issue_url(@project, issue), html_options.merge(title: "Issue: #{issue.title}", class: "gfm gfm-issue #{html_options[:class]}"))
+        pm_url = UndevSettings[:pm]["issues_url"]
+        link_to("##{identifier}", pm_url.gsub(':id', identifier), html_options.merge(title: "Issue: #{issue.title}", class: "gfm gfm-issue #{html_options[:class]}"))
       end
     end
 
