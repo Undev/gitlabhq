@@ -42,8 +42,10 @@ gravatar:
   # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
   # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=mm
 
-
-
+## Available issues trackers
+issues_tracker:
+  redmine:
+    issues_url: "http://redmine.sample/issues/:id"
 #
 # 2. Auth settings
 # ==========================
