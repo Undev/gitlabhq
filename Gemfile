@@ -136,9 +136,9 @@ group :development do
   gem 'capistrano'
   gem 'rvm-capistrano'
   gem 'capistrano-ext'
-  gem 'capistrano_colors'
 end
 
+gem 'rb-inotify', require: linux_only('rb-inotify')
 group :development, :test do
   gem 'rails-dev-tweaks'
   gem 'spinach-rails'
@@ -157,7 +157,6 @@ group :development, :test do
   # Notification
   gem 'rb-fsevent', require: darwin_only('rb-fsevent')
   gem 'growl',      require: darwin_only('growl')
-  gem 'rb-inotify', require: linux_only('rb-inotify')
 
   # PhantomJS driver for Capybara
   gem 'poltergeist', git: 'https://github.com/jonleighton/poltergeist.git', ref: '5c2e092001074a8cf09f332d3714e9ba150bc8ca'
