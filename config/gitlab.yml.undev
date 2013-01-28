@@ -100,7 +100,7 @@ omniauth:
 # GitLab Satellites
 satellites:
   # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
-  path: tmp/gitlab-satellites/
+  path: /rest/u/apps/gitlab/shared/gitlab-satellites/
 
 ## Backup settings
 backup:
