@@ -11,7 +11,7 @@
 #
 
 class UserTeam < ActiveRecord::Base
-  attr_accessible :name, :owner_id, :path
+  attr_accessible :name, :description, :owner_id, :path
 
   belongs_to :owner, class_name: User
 
@@ -21,6 +21,7 @@ class UserTeam < ActiveRecord::Base
   has_many :projects, through: :user_team_project_relationships
   has_many :members,  through: :user_team_user_relationships, source: :user
 
+  validates :description, length: { within: 0..255 }
   validates :name, presence: true, uniqueness: true
   validates :owner, presence: true
   validates :path, uniqueness: true, presence: true, length: { within: 1..255 },
