@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131070232) do
+ActiveRecord::Schema.define(:version => 20130207104426) do
 
   create_table "events", :force => true do |t|
     t.string   "target_type"
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(:version => 20130131070232) do
   add_index "keys", ["user_id"], :name => "index_keys_on_user_id"
 
   create_table "merge_requests", :force => true do |t|
-    t.string   "target_branch",                    :null => false
-    t.string   "source_branch",                    :null => false
-    t.integer  "project_id",                       :null => false
+    t.string   "target_branch",                                          :null => false
+    t.string   "source_branch",                                          :null => false
+    t.integer  "project_id",                                             :null => false
     t.integer  "author_id"
     t.integer  "assignee_id"
     t.string   "title"
@@ -109,12 +109,13 @@ ActiveRecord::Schema.define(:version => 20130131070232) do
   add_index "milestones", ["project_id"], :name => "index_milestones_on_project_id"
 
   create_table "namespaces", :force => true do |t|
-    t.string   "name",       :null => false
-    t.string   "path",       :null => false
-    t.integer  "owner_id",   :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name",                        :null => false
+    t.string   "path",                        :null => false
+    t.integer  "owner_id",                    :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.string   "type"
+    t.string   "description", :default => "", :null => false
   end
 
   add_index "namespaces", ["name"], :name => "index_namespaces_on_name"
@@ -233,8 +234,9 @@ ActiveRecord::Schema.define(:version => 20130131070232) do
     t.string   "name"
     t.string   "path"
     t.integer  "owner_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+    t.string   "description", :default => "", :null => false
   end
 
   create_table "users", :force => true do |t|

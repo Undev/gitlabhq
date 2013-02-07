@@ -4,6 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string(255)      not null
+#  description :string(255)      not null
 #  path       :string(255)      not null
 #  owner_id   :integer          not null
 #  created_at :datetime         not null
@@ -12,12 +13,13 @@
 #
 
 class Namespace < ActiveRecord::Base
-  attr_accessible :name, :path
+  attr_accessible :name, :description, :path
 
   has_many :projects, dependent: :destroy
   belongs_to :owner, class_name: "User"
 
   validates :name, presence: true, uniqueness: true
+  validates :description, length: { within: 0..255 }
   validates :path, uniqueness: true, presence: true, length: { within: 1..255 },
             format: { with: Gitlab::Regex.path_regex,
                       message: "only letters, digits & '_' '-' '.' allowed. Letter should be first" }
