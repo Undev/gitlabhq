@@ -51,11 +51,7 @@ class User < ActiveRecord::Base
   #
 
   # Namespace for personal projects
-  has_one :namespace,
-    dependent: :destroy,
-    foreign_key: :owner_id,
-    class_name: "Namespace",
-    conditions: 'type IS NULL'
+  has_one :namespace, dependent: :destroy, foreign_key: :owner_id, class_name: "Namespace", conditions: 'type IS NULL'
 
   # Profile
   has_many :keys, dependent: :destroy
@@ -64,15 +60,11 @@ class User < ActiveRecord::Base
   has_many :groups, class_name: "Group", foreign_key: :owner_id
 
   # Teams
-  has_many :own_teams,
-    class_name: "UserTeam",
-    foreign_key: :owner_id,
-    dependent: :destroy
-
-  has_many :user_team_user_relationships, dependent: :destroy
-  has_many :user_teams, through: :user_team_user_relationships
+  has_many :own_teams,                       dependent: :destroy, class_name: "UserTeam", foreign_key: :owner_id
+  has_many :user_team_user_relationships,    dependent: :destroy
+  has_many :user_teams,                      through: :user_team_user_relationships
   has_many :user_team_project_relationships, through: :user_teams
-  has_many :team_projects, through: :user_team_project_relationships
+  has_many :team_projects,                   through: :user_team_project_relationships
 
   # Projects
   has_many :users_projects,           dependent: :destroy
@@ -80,14 +72,12 @@ class User < ActiveRecord::Base
   has_many :notes,                    dependent: :destroy, foreign_key: :author_id
   has_many :merge_requests,           dependent: :destroy, foreign_key: :author_id
   has_many :events,                   dependent: :destroy, foreign_key: :author_id,   class_name: "Event"
+  has_many :recent_events,                                 foreign_key: :author_id,   class_name: "Event", order: "id DESC"
   has_many :assigned_issues,          dependent: :destroy, foreign_key: :assignee_id, class_name: "Issue"
   has_many :assigned_merge_requests,  dependent: :destroy, foreign_key: :assignee_id, class_name: "MergeRequest"
-  has_many :projects, through: :users_projects
+  has_many :projects,                 through: :users_projects
+  has_many :own_projects,             foreign_key: :creator_id
 
-  has_many :recent_events,
-    class_name: "Event",
-    foreign_key: :author_id,
-    order: "id DESC"
 
   #
   # Validations
@@ -100,7 +90,6 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true,
             format: { with: Gitlab::Regex.username_regex,
                       message: "only letters, digits & '_' '-' '.' allowed. Letter should be first" }
-
 
   validate :namespace_uniq, if: ->(user) { user.username_changed? }
 
@@ -135,6 +124,22 @@ class User < ActiveRecord::Base
   scope :in_team, ->(team){ where(id: team.member_ids) }
   scope :not_in_team, ->(team){ where('users.id NOT IN (:ids)', ids: team.member_ids) }
   scope :potential_team_members, ->(team) { team.members.any? ? active.not_in_team(team) : active  }
+
+  # Groups where user is an owner
+  scope :personal_groups, -> { groups }
+
+  scope :authorized_groups, -> { personal_groups }
+
+  # Projects in user namespace
+  scope :personal_projects, -> { namespace.projects }
+
+  scope :owned_projects, -> { own_projects }
+
+  # Projects user has access to
+  scope :authorized_projects, -> { projects.merge(owned_projects) }
+
+  # Team membership in authorized projects
+  scope :tm_in_authorized_projects, -> { users_projects }
 
   #
   # Class methods
@@ -215,45 +220,6 @@ class User < ActiveRecord::Base
     namespaces += groups.all
 
     namespaces
-  end
-
-  # Groups where user is an owner
-  def owned_groups
-    groups
-  end
-
-  # Groups user has access to
-  def authorized_groups
-    @authorized_groups ||= begin
-                           groups = Group.where(id: self.authorized_projects.pluck(:namespace_id)).all
-                           groups = groups + self.groups
-                           groups.uniq
-                         end
-  end
-
-
-  # Projects user has access to
-  def authorized_projects
-    project_ids = users_projects.pluck(:project_id)
-    project_ids = project_ids | owned_projects.pluck(:id)
-    Project.where(id: project_ids)
-  end
-
-  # Projects in user namespace
-  def personal_projects
-    Project.personal(self)
-  end
-
-  # Projects where user is an owner
-  def owned_projects
-    Project.where("(projects.namespace_id IN (:namespaces)) OR
-                  (projects.namespace_id IS NULL AND projects.creator_id = :user_id)",
-                  namespaces: namespaces.map(&:id), user_id: self.id)
-  end
-
-  # Team membership in authorized projects
-  def tm_in_authorized_projects
-    UsersProject.where(project_id:  authorized_projects.map(&:id), user_id: self.id)
   end
 
   def is_admin?

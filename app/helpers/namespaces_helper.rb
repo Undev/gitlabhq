@@ -4,7 +4,7 @@ module NamespacesHelper
       groups = Group.all
       users = Namespace.root
     else
-      groups = current_user.owned_groups.select {|n| n.type == 'Group'}
+      groups = current_user.personal_groups.select {|n| n.type == 'Group'}
       users = current_user.namespaces.reject {|n| n.type == 'Group'}
     end
 

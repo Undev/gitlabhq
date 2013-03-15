@@ -121,7 +121,7 @@ describe User do
     it { @user.several_namespaces?.should be_true }
     it { @user.namespaces.should == [@user.namespace, @group] }
     it { @user.authorized_groups.should == [@group] }
-    it { @user.owned_groups.should == [@group] }
+    it { @user.personal_groups.should == [@group] }
   end
 
   describe 'namespaced' do
